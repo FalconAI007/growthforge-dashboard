@@ -1,8 +1,11 @@
 # GrowthForge Media — Lead Intelligence Dashboard
 
 **Live Dashboard:** https://growthforge-dashboard.vercel.app
+
 **Password:** `growthforge2025`
+
 **Backend Repo:** https://github.com/FalconAI007/growthforge-backend
+
 **Website Repo:** https://github.com/FalconAI007/growthforge-website
 
 ---
@@ -17,9 +20,14 @@ It is a standalone frontend — no server, no build process, pure HTML/CSS/JS �
 
 ## Screenshots
 
-- `screenshot-dashboard-table.png` — Main leads table with score badges, intent tags, and stage badges visible
-- `screenshot-lead-panel.png` — Slide-in lead panel showing full contact details and conversation transcript
-- `screenshot-dashboard-stats.png` — Stats row at top showing Total Leads, Decision Ready, Hot Leads counts
+![Dashboard Table](https://github.com/user-attachments/assets/ca149990-4ae5-46fa-955b-b7bb457389bb)
+*Main leads table showing all captured leads sorted by AI score with colour-coded score badges, intent tags, and stage badges*
+
+![Lead Panel](https://github.com/user-attachments/assets/6f668d4f-2877-412e-b9bf-c6c5259bcbb6)
+*Lead detail panel showing full contact details, AI-generated summary, and complete conversation transcript fetched live from Supabase*
+
+![Dashboard Stats](https://github.com/user-attachments/assets/873d224f-fdd0-466f-858c-e917e280a037)
+*Stats row showing Total Leads, Decision Ready, Considering, Hot Leads, and Captured Today — all calculated live from the API*
 
 ---
 
