@@ -20,7 +20,6 @@
             min-height: 100vh;
         }
 
-        /* LOGIN */
         #login-screen {
             min-height: 100vh;
             display: flex;
@@ -107,7 +106,6 @@
             display: none;
         }
 
-        /* DASHBOARD */
         #dashboard-screen {
             display: none;
         }
@@ -200,7 +198,6 @@
             padding: 32px;
         }
 
-        /* STATS */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -261,7 +258,6 @@
             color: #fff;
         }
 
-        /* TABLE */
         .section-hdr {
             display: flex;
             align-items: center;
@@ -338,7 +334,6 @@
             background: rgba(255, 255, 255, 0.04);
         }
 
-        /* BADGES */
         .s-badge {
             padding: 3px 10px;
             border-radius: 20px;
@@ -393,7 +388,6 @@
             white-space: nowrap;
         }
 
-        /* TIMELINE */
         .timeline-wrap {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -452,7 +446,6 @@
             line-height: 1.7;
         }
 
-        /* DETAIL PANEL */
         #detail-panel {
             position: fixed;
             top: 0;
@@ -555,7 +548,6 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        /* TRANSCRIPT */
         .transcript-wrap {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -602,7 +594,6 @@
             color: rgba(255, 255, 255, 0.75);
         }
 
-        /* PANEL ACTIONS */
         .panel-actions {
             padding: 16px 24px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -643,7 +634,6 @@
             color: #fff;
         }
 
-        /* OVERLAY */
         #panel-overlay {
             display: none;
             position: fixed;
@@ -672,13 +662,20 @@
             line-height: 1.7;
         }
 
-        @media (max-width: 1100px) {
+        .loading-transcript {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+            padding: 16px 0;
+            text-align: center;
+        }
+
+        @media (max-width:1100px) {
             .stats-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width:768px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -727,13 +724,12 @@
                     Live · Auto-refresh 30s
                 </div>
                 <div id="last-updated" style="font-size:11px;
-                color:rgba(255,255,255,0.25);"></div>
+                    color:rgba(255,255,255,0.25);"></div>
                 <button class="logout-btn" onclick="doLogout()">Sign Out</button>
             </div>
         </div>
 
         <div class="db-body">
-            <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">Total Leads</div>
@@ -762,15 +758,12 @@
                 </div>
             </div>
 
-            <!-- Table -->
             <div class="section-hdr">
                 <h2>All Leads <span style="font-size:12px;
-                color:rgba(255,255,255,0.3); font-weight:400;">
+                    color:rgba(255,255,255,0.3);font-weight:400;">
                         — Click any row to view full details
                     </span></h2>
-                <button class="refresh-btn" onclick="loadData()">
-                    ↻ Refresh Now
-                </button>
+                <button class="refresh-btn" onclick="loadData()">↻ Refresh Now</button>
             </div>
             <div class="tbl-wrap" id="tbl-wrap">
                 <div class="empty-state">
@@ -779,7 +772,6 @@
                 </div>
             </div>
 
-            <!-- Timeline -->
             <div class="section-hdr">
                 <h2>Lead Journey Timeline</h2>
             </div>
@@ -800,9 +792,7 @@
             <h3 id="panel-title">Lead Details</h3>
             <button class="panel-close" onclick="closePanel()">×</button>
         </div>
-        <div class="panel-body" id="panel-body">
-            <!-- Populated dynamically -->
-        </div>
+        <div class="panel-body" id="panel-body"></div>
         <div class="panel-actions">
             <button class="action-btn primary" id="export-btn" onclick="exportChat()">
                 ⬇ Export Chat
@@ -815,6 +805,7 @@
 
     <script>
         const API = "https://growthforge-api.onrender.com/leads";
+        const CONV_API = "https://growthforge-api.onrender.com/conversations";
         const TEAM_PASSWORD = "growthforge2025";
 
         let allLeads = [];
@@ -871,8 +862,8 @@
             const s = score || 0;
             const color = s >= 8 ? '#00C48C' : s >= 5 ? '#FFD700' : s >= 3 ? '#1E90FF' : '#aaa';
             return `<span class="score-badge" style="
-            background:${color}22; color:${color};
-            border:1px solid ${color}44;">${s}/10</span>`;
+                background:${color}22;color:${color};
+                border:1px solid ${color}44;">${s}/10</span>`;
         }
 
         // LOAD DATA
@@ -886,7 +877,6 @@
                 document.getElementById('last-updated').textContent =
                     'Updated ' + new Date().toLocaleTimeString();
 
-                // Stats
                 document.getElementById('s-total').textContent = data.total || 0;
                 document.getElementById('s-decision').textContent =
                     allLeads.filter(l => l.stage === 'DECISION' || l.stage === 'captured').length;
@@ -901,14 +891,14 @@
 
                 if (allLeads.length === 0) {
                     document.getElementById('tbl-wrap').innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📭</div>
-                        <p>No leads yet. Start a chat on the website!</p>
-                    </div>`;
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <p>No leads yet. Start a chat on the website!</p>
+                        </div>`;
                     document.getElementById('tl-wrap').innerHTML = `
-                    <div class="empty-state">
-                        <p>Timeline appears as leads come in.</p>
-                    </div>`;
+                        <div class="empty-state">
+                            <p>Timeline appears as leads come in.</p>
+                        </div>`;
                     return;
                 }
 
@@ -919,41 +909,37 @@
                     return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
                 });
 
-                // Table
                 let tbl = `<table><thead><tr>
-                <th>#</th><th>Score</th><th>Name</th>
-                <th>Business</th><th>Email</th><th>Phone</th>
-                <th>Intent</th><th>Stage</th><th>Summary</th>
-                <th>Captured</th>
-            </tr></thead><tbody>`;
+                    <th>#</th><th>Score</th><th>Name</th>
+                    <th>Business</th><th>Email</th><th>Phone</th>
+                    <th>Intent</th><th>Stage</th><th>Summary</th>
+                    <th>Captured</th>
+                </tr></thead><tbody>`;
 
                 sorted.forEach((lead, i) => {
                     const summary = lead.conversation_summary || '—';
                     const truncated = summary.length > 40
                         ? summary.substring(0, 40) + '...' : summary;
-                    const hasChat = lead.conversation_history &&
-                        lead.conversation_history.length > 0;
 
                     tbl += `<tr onclick="openPanel('${lead.session_id}')">
-                    <td style="color:rgba(255,255,255,0.25);font-size:12px;">
-                        ${sorted.length - i}
-                    </td>
-                    <td>${scoreBadge(lead.lead_score)}</td>
-                    <td><strong>${lead.name || '—'}</strong></td>
-                    <td>${lead.business || '—'}</td>
-                    <td style="color:#1E90FF;">${lead.email || '—'}</td>
-                    <td>${lead.phone || '—'}</td>
-                    <td>${intentPill(lead.intent)}</td>
-                    <td>${stageBadge(lead.stage)}</td>
-                    <td style="color:rgba(255,255,255,0.5);font-size:12px;"
-                        title="${summary}">
-                        ${truncated}
-                        ${hasChat ? '<span style="color:#1E90FF;font-size:10px;margin-left:4px;">📄</span>' : ''}
-                    </td>
-                    <td style="color:rgba(255,255,255,0.3);font-size:12px;white-space:nowrap;">
-                        ${fmtDate(lead.timestamp)}
-                    </td>
-                </tr>`;
+                        <td style="color:rgba(255,255,255,0.25);font-size:12px;">
+                            ${sorted.length - i}
+                        </td>
+                        <td>${scoreBadge(lead.lead_score)}</td>
+                        <td><strong>${lead.name || '—'}</strong></td>
+                        <td>${lead.business || '—'}</td>
+                        <td style="color:#1E90FF;">${lead.email || '—'}</td>
+                        <td>${lead.phone || '—'}</td>
+                        <td>${intentPill(lead.intent)}</td>
+                        <td>${stageBadge(lead.stage)}</td>
+                        <td style="color:rgba(255,255,255,0.5);font-size:12px;"
+                            title="${summary}">
+                            ${truncated}
+                        </td>
+                        <td style="color:rgba(255,255,255,0.3);font-size:12px;white-space:nowrap;">
+                            ${fmtDate(lead.timestamp)}
+                        </td>
+                    </tr>`;
                 });
 
                 tbl += `</tbody></table>`;
@@ -973,27 +959,27 @@
                     const score = lead.lead_score || 0;
 
                     tl += `<div class="t-item ${cls}"
-                    onclick="openPanel('${lead.session_id}')"
-                    style="cursor:pointer;">
-                    <div class="t-title">
-                        ${lead.name || 'Anonymous Visitor'}
-                        ${lead.business
+                        onclick="openPanel('${lead.session_id}')"
+                        style="cursor:pointer;">
+                        <div class="t-title">
+                            ${lead.name || 'Anonymous Visitor'}
+                            ${lead.business
                             ? `<span style="color:rgba(255,255,255,0.3);font-weight:400;">
-                                — ${lead.business}</span>` : ''}
-                        ${stageBadge(lead.stage)}
-                        ${scoreBadge(score)}
-                    </div>
-                    <div class="t-meta">
-                        Intent: <strong style="color:rgba(255,255,255,0.55)">
-                            ${lead.intent || '—'}
-                        </strong> &nbsp;·&nbsp;
-                        ${lead.conversation_summary || 'No summary'}
-                        &nbsp;·&nbsp; ${fmtDate(lead.timestamp)}
-                        ${lead.email
+                                    — ${lead.business}</span>` : ''}
+                            ${stageBadge(lead.stage)}
+                            ${scoreBadge(score)}
+                        </div>
+                        <div class="t-meta">
+                            Intent: <strong style="color:rgba(255,255,255,0.55)">
+                                ${lead.intent || '—'}
+                            </strong> &nbsp;·&nbsp;
+                            ${lead.conversation_summary || 'No summary'}
+                            &nbsp;·&nbsp; ${fmtDate(lead.timestamp)}
+                            ${lead.email
                             ? `&nbsp;·&nbsp;<span style="color:#1E90FF">
-                                ${lead.email}</span>` : ''}
-                    </div>
-                </div>`;
+                                    ${lead.email}</span>` : ''}
+                        </div>
+                    </div>`;
                 });
 
                 document.getElementById('tl-wrap').innerHTML =
@@ -1001,10 +987,9 @@
 
             } catch (err) {
                 const errHTML = `<div class="empty-state">
-                <div class="empty-icon">⚠️</div>
-                <p>Cannot connect to backend.<br>
-                Make sure api.py is running on port 5000.</p>
-            </div>`;
+                    <div class="empty-icon">⚠️</div>
+                    <p>Cannot connect to backend.</p>
+                </div>`;
                 document.getElementById('tbl-wrap').innerHTML = errHTML;
                 document.getElementById('tl-wrap').innerHTML = errHTML;
                 console.error('Dashboard error:', err);
@@ -1012,7 +997,8 @@
         }
 
         // DETAIL PANEL
-        function openPanel(sessionId) {
+        // Fetches transcript from Supabase via /conversations endpoint
+        async function openPanel(sessionId) {
             currentLead = allLeads.find(l => l.session_id === sessionId);
             if (!currentLead) return;
 
@@ -1025,26 +1011,26 @@
 
             let html = '';
 
-            // Score + Stage
+            // Score + Stage + Intent
             html += `<div class="panel-section">
-            <div class="panel-section-title">Lead Overview</div>
-            <div style="display:flex;gap:10px;margin-bottom:16px;">
-                ${scoreBadge(lead.lead_score)}
-                ${stageBadge(lead.stage)}
-                ${intentPill(lead.intent)}
-            </div>`;
+                <div class="panel-section-title">Lead Overview</div>
+                <div style="display:flex;gap:10px;margin-bottom:16px;">
+                    ${scoreBadge(lead.lead_score)}
+                    ${stageBadge(lead.stage)}
+                    ${intentPill(lead.intent)}
+                </div>`;
 
             // Summary
             if (lead.conversation_summary) {
                 html += `<div class="summary-box">
-                💡 ${lead.conversation_summary}
-            </div>`;
+                    💡 ${lead.conversation_summary}
+                </div>`;
             }
             html += `</div>`;
 
             // Contact Details
             html += `<div class="panel-section">
-            <div class="panel-section-title">Contact Details</div>`;
+                <div class="panel-section-title">Contact Details</div>`;
             const details = [
                 ['Name', lead.name || '—'],
                 ['Email', lead.email || '—'],
@@ -1055,49 +1041,76 @@
             ];
             details.forEach(([label, value]) => {
                 html += `<div class="detail-row">
-                <span class="detail-label">${label}</span>
-                <span class="detail-value">${value}</span>
-            </div>`;
+                    <span class="detail-label">${label}</span>
+                    <span class="detail-value">${value}</span>
+                </div>`;
             });
             html += `</div>`;
 
-            // Conversation Transcript
-            const history = lead.conversation_history || [];
-            if (history.length > 0) {
-                html += `<div class="panel-section">
+            // Transcript placeholder — will be loaded async
+            html += `<div class="panel-section" id="transcript-section">
                 <div class="panel-section-title">
                     Full Conversation Transcript
-                    (${Math.floor(history.length / 2)} exchanges)
                 </div>
-                <div class="transcript-wrap">`;
-
-                history.forEach(msg => {
-                    const isUser = msg.role === 'user';
-                    html += `<div class="transcript-msg ${isUser ? 'user' : 'assistant'}">
-                    <div class="transcript-role">
-                        ${isUser ? '👤 Visitor' : '🪬 Chanakya'}
-                    </div>
-                    <div class="transcript-text">${msg.content}</div>
-                </div>`;
-                });
-
-                html += `</div></div>`;
-            } else {
-                html += `<div class="panel-section">
-                <div class="panel-section-title">Conversation</div>
-                <div style="color:rgba(255,255,255,0.3);font-size:13px;
-                    padding:16px 0;">
-                    No conversation transcript available for this lead.
-                    Transcript is saved after the first AI interaction.
+                <div id="transcript-content">
+                    <div class="loading-transcript">⏳ Loading transcript...</div>
                 </div>
             </div>`;
-            }
 
             body.innerHTML = html;
 
-            // Open panel
+            // Open panel immediately
             panel.classList.add('open');
             document.getElementById('panel-overlay').classList.add('active');
+
+            // Fetch transcript from Supabase via API
+            try {
+                const res = await fetch(`${CONV_API}/${sessionId}`);
+                const data = await res.json();
+                const history = data.history || [];
+
+                const transcriptContent = document.getElementById('transcript-content');
+                if (!transcriptContent) return;
+
+                if (history.length > 0) {
+                    // Update section title with exchange count
+                    const sectionTitle = document.querySelector(
+                        '#transcript-section .panel-section-title'
+                    );
+                    if (sectionTitle) {
+                        sectionTitle.textContent =
+                            `Full Conversation Transcript (${Math.floor(history.length / 2)} exchanges)`;
+                    }
+
+                    let transcriptHTML = '<div class="transcript-wrap">';
+                    history.forEach(msg => {
+                        const isUser = msg.role === 'user';
+                        transcriptHTML += `<div class="transcript-msg ${isUser ? 'user' : 'assistant'}">
+                            <div class="transcript-role">
+                                ${isUser ? '👤 Visitor' : '🪬 Chanakya'}
+                            </div>
+                            <div class="transcript-text">${msg.content}</div>
+                        </div>`;
+                    });
+                    transcriptHTML += '</div>';
+                    transcriptContent.innerHTML = transcriptHTML;
+                } else {
+                    transcriptContent.innerHTML = `
+                        <div style="color:rgba(255,255,255,0.3);font-size:13px;padding:16px 0;">
+                            No conversation transcript available yet.
+                            Transcript is saved after the first AI interaction.
+                        </div>`;
+                }
+            } catch (e) {
+                const transcriptContent = document.getElementById('transcript-content');
+                if (transcriptContent) {
+                    transcriptContent.innerHTML = `
+                        <div style="color:rgba(255,255,255,0.3);font-size:13px;padding:16px 0;">
+                            Could not load transcript.
+                        </div>`;
+                }
+                console.error('Transcript fetch error:', e);
+            }
         }
 
         function closePanel() {
@@ -1107,11 +1120,32 @@
         }
 
         // EXPORT CHAT
-        function exportChat() {
+        // Fetches transcript from API then downloads as .txt
+        async function exportChat() {
             if (!currentLead) return;
             const lead = currentLead;
-            const history = lead.conversation_history || [];
 
+            // Show loading state on button
+            const btn = document.getElementById('export-btn');
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Loading...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${CONV_API}/${lead.session_id}`);
+                const data = await res.json();
+                const history = data.history || [];
+                downloadExport(lead, history);
+            } catch (e) {
+                console.error('Export fetch error:', e);
+                downloadExport(lead, []);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function downloadExport(lead, history) {
             let content = `GROWTHFORGE MEDIA — LEAD EXPORT\n`;
             content += `${'='.repeat(50)}\n\n`;
             content += `LEAD DETAILS\n`;
@@ -1147,7 +1181,6 @@
             content += `Exported: ${new Date().toLocaleString()}\n`;
             content += `GrowthForge Media Lead Intelligence Dashboard\n`;
 
-            // Download as .txt file
             const blob = new Blob([content], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1168,7 +1201,6 @@
             btn.style.color = '#00C48C';
             btn.style.borderColor = 'rgba(0,196,140,0.3)';
             btn.disabled = true;
-            // In production this would update the lead status in DB
         }
 
         // AUTO REFRESH
